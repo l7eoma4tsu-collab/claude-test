@@ -3,871 +3,201 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>reo — AI Developer Portfolio</title>
-  <meta name="description" content="Claude をはじめとする LLM を活用したアプリ・ツール・ゲームを開発するAIデベロッパー reo のポートフォリオ。">
-  <meta property="og:title" content="reo — AI Developer Portfolio">
-  <meta property="og:description" content="Claude をはじめとする LLM を活用したアプリ・ツール・ゲームを開発。">
-  <meta property="og:type" content="website">
+  <title>AI Developer Portfolio</title>
+  <meta name="description" content="Claude Codeを活用したAI開発の実績をまとめたポートフォリオ。ゲーム・モバイルアプリ・AIエージェント・Webツールを制作。">
+  <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;800&display=swap" rel="stylesheet">
-
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --black:       #000000;
-      --white:       #ffffff;
-      --navy:        #124099;
-      --navy-hover:  #2952cc;
-      --gray-dark1:  #131314;
-      --gray-dark2:  #2b2e33;
-      --gray-dark3:  #3c4047;
-      --gray-main1:  #667084;
-      --gray-main2:  #9099ab;
-      --gray-light1: #a9adb8;
-      --gray-light2: #dadde5;
-      --gray-light3: #edeef2;
-
-      --side: clamp(24px, calc(100vw * 60 / 1440), 80px);
-      --ease-brand: cubic-bezier(0.56, -0.01, 0.32, 0.99);
-      --ease-std:   cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    html { scroll-behavior: smooth; font-size: 16px; }
-
-    body {
-      background: var(--white);
-      color: var(--black);
-      font-family: 'Inter', 'Noto Sans JP', system-ui, sans-serif;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* ── UTILS ─────────────────────────────────── */
-    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
-
-    /* ── NAV ───────────────────────────────────── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 20px var(--side);
-      transition: background 0.3s var(--ease-std), backdrop-filter 0.3s;
-    }
-    nav.scrolled {
-      background: rgba(0,0,0,0.88);
-      backdrop-filter: blur(17.5px);
-      -webkit-backdrop-filter: blur(17.5px);
-    }
-    .logo {
-      font-family: 'Inter', sans-serif;
-      font-size: 15px; font-weight: 800;
-      letter-spacing: 0.06em;
-      color: var(--white);
-      text-decoration: none;
-    }
-    .logo span { color: var(--navy); }
-    .nav-links { display: flex; gap: 32px; align-items: center; }
-    .nav-links a {
-      font-size: 12px; font-weight: 500;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      color: rgba(255,255,255,0.55);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--white); }
-    .nav-links .nav-cta {
-      padding: 7px 16px;
-      border: 1px solid rgba(255,255,255,0.25);
-      border-radius: 2px;
-      color: var(--white);
-      transition: border-color 0.2s, background 0.2s;
-    }
-    .nav-links .nav-cta:hover { border-color: var(--white); background: rgba(255,255,255,0.06); }
-    .nav-menu-btn { display: none; background: none; border: none; cursor: pointer; padding: 4px; }
-    .nav-menu-btn span {
-      display: block; width: 22px; height: 1.5px;
-      background: var(--white); margin: 5px 0;
-      transition: transform 0.3s, opacity 0.3s;
-    }
-
-    /* ── HERO ─────────── 黒背景 ──────────────── */
-    .hero {
-      background: var(--black);
-      color: var(--white);
-      min-height: 100svh;
-      display: flex; align-items: center;
-      padding: 0 var(--side);
-      position: relative; overflow: hidden;
-    }
-    .hero-inner { position: relative; z-index: 1; padding-top: 80px; max-width: 860px; }
-
-    .hero-eyebrow {
-      display: inline-flex; align-items: center; gap: 10px;
-      font-size: 11px; font-weight: 700;
-      letter-spacing: 0.18em; text-transform: uppercase;
-      color: var(--navy);
-      margin-bottom: 28px;
-    }
-    .hero-eyebrow::before {
-      content: ''; display: block;
-      width: 28px; height: 1px; background: var(--navy);
-    }
-
-    .hero-title {
-      font-family: 'Noto Sans JP', 'Inter', sans-serif;
-      font-size: clamp(48px, 7.5vw, 108px);
-      font-weight: 800;
-      line-height: 1.0;
-      letter-spacing: -0.02em;
-      margin-bottom: 28px;
-    }
-    .hero-title .muted { color: var(--gray-main1); }
-
-    .hero-body {
-      font-size: clamp(14px, 1.1vw, 16px);
-      color: var(--gray-main2);
-      line-height: 1.9;
-      max-width: 440px;
-      letter-spacing: 0.03em;
-      margin-bottom: 44px;
-    }
-
-    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
-    .btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 11px 24px;
-      font-size: 12px; font-weight: 700;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      text-decoration: none; border: none; cursor: pointer;
-      border-radius: 2px;
-      transition: background 0.2s var(--ease-std), color 0.2s, border-color 0.2s;
-    }
-    .btn-primary { background: var(--navy); color: var(--white); }
-    .btn-primary:hover { background: var(--navy-hover); }
-    .btn-ghost {
-      background: transparent; color: var(--white);
-      border: 1px solid rgba(255,255,255,0.28);
-    }
-    .btn-ghost:hover { border-color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.05); }
-
-    .hero-bg {
-      position: absolute; bottom: -0.1em; right: -0.05em;
-      font-family: 'Inter', sans-serif;
-      font-size: clamp(100px, 19vw, 280px);
-      font-weight: 800; letter-spacing: -0.05em;
-      color: rgba(255,255,255,0.028);
-      line-height: 1; user-select: none; white-space: nowrap;
-      pointer-events: none;
-    }
-
-    .hero-scroll {
-      position: absolute; bottom: 36px; left: var(--side);
-      display: flex; align-items: center; gap: 10px;
-      font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
-      text-transform: uppercase; color: var(--gray-dark3);
-    }
-    .hero-scroll::before {
-      content: ''; display: block;
-      width: 1px; height: 36px; background: var(--gray-dark3);
-    }
-
-    /* ── ABOUT ─────────── 白背景 ──────────────── */
-    .about {
-      background: var(--white);
-      color: var(--black);
-      padding: 120px var(--side);
-    }
-    .about-inner {
-      display: grid;
-      grid-template-columns: 1fr 1.4fr;
-      gap: 80px;
-      align-items: start;
-      max-width: 1200px;
-    }
-    .section-eyebrow {
-      font-size: 11px; font-weight: 700;
-      letter-spacing: 0.18em; text-transform: uppercase;
-      color: var(--navy);
-      display: flex; align-items: center; gap: 10px;
-      margin-bottom: 20px;
-    }
-    .section-eyebrow::after {
-      content: ''; flex: 1; max-width: 32px;
-      height: 1px; background: var(--navy);
-    }
-    .section-title {
-      font-family: 'Noto Sans JP', sans-serif;
-      font-size: clamp(28px, 3.5vw, 48px);
-      font-weight: 800;
-      letter-spacing: -0.025em;
-      line-height: 1.1;
-      margin-bottom: 0;
-    }
-    .about-right {}
-    .about-lead {
-      font-size: clamp(15px, 1.2vw, 17px);
-      line-height: 1.9;
-      color: var(--gray-dark1);
-      margin-bottom: 28px;
-      letter-spacing: 0.03em;
-    }
-    .about-body {
-      font-size: 14px;
-      line-height: 1.95;
-      color: var(--gray-main1);
-      letter-spacing: 0.03em;
-      margin-bottom: 36px;
-    }
-    .about-stats {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--gray-light2);
-      border: 1px solid var(--gray-light2);
-    }
-    .stat-item {
-      background: var(--white);
-      padding: 20px 20px 18px;
-    }
-    .stat-num {
-      font-family: 'Inter', sans-serif;
-      font-size: 28px; font-weight: 800;
-      letter-spacing: -0.03em;
-      color: var(--black);
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-    .stat-num span { font-size: 16px; color: var(--navy); margin-left: 1px; }
-    .stat-label {
-      font-size: 11px; font-weight: 600;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      color: var(--gray-main1);
-    }
-
-    /* ── WORKS ─────────── 黒背景 ──────────────── */
-    .works {
-      background: var(--black);
-      color: var(--white);
-      padding: 120px var(--side);
-    }
-    .works-header {
-      display: flex; justify-content: space-between; align-items: flex-end;
-      margin-bottom: 56px;
-      gap: 24px; flex-wrap: wrap;
-    }
-    .works-header .section-eyebrow { color: var(--navy); }
-    .works-header .section-title { color: var(--white); }
-    .works-count {
-      font-size: 11px; font-weight: 700;
-      letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--gray-dark3);
-      padding-bottom: 4px;
-    }
-
-    .works-grid {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 1px;
-      background: var(--gray-dark2);
-      border: 1px solid var(--gray-dark2);
-    }
-
-    .work-card {
-      background: var(--black);
-      display: flex; flex-direction: column;
-      overflow: hidden;
-      cursor: pointer;
-      transition: background 0.25s var(--ease-std);
-    }
-    .work-card:hover { background: var(--gray-dark1); }
-    .work-card:nth-child(1) { grid-column: span 7; }
-    .work-card:nth-child(2) { grid-column: span 5; }
-    .work-card:nth-child(3) { grid-column: span 5; }
-    .work-card:nth-child(4) { grid-column: span 7; }
-    .work-card:nth-child(5) { grid-column: span 6; }
-    .work-card:nth-child(6) { grid-column: span 6; }
-
-    .card-thumb {
-      width: 100%; aspect-ratio: 16/9;
-      overflow: hidden; position: relative;
-      background: var(--gray-dark1);
-    }
-    .card-thumb img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      object-position: top left;
-      display: block;
-      transition: transform 0.55s var(--ease-brand), filter 0.3s;
-      filter: brightness(0.92);
-    }
-    .work-card:hover .card-thumb img {
-      transform: scale(1.03);
-      filter: brightness(1);
-    }
-    /* モバイルアプリは contain で全体を見せる */
-    .card-thumb.mobile-app img {
-      object-fit: contain;
-      background: #1a2233;
-    }
-
-    .card-overlay {
-      position: absolute; inset: 0;
-      background: rgba(18, 64, 153, 0);
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.3s;
-    }
-    .work-card:hover .card-overlay { background: rgba(18, 64, 153, 0.12); }
-    .card-overlay-label {
-      font-size: 11px; font-weight: 700;
-      letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--white);
-      border: 1px solid rgba(255,255,255,0.7);
-      padding: 8px 18px;
-      opacity: 0; transform: translateY(8px);
-      transition: opacity 0.25s, transform 0.25s var(--ease-brand);
-    }
-    .work-card:hover .card-overlay-label { opacity: 1; transform: translateY(0); }
-
-    .card-body {
-      padding: 24px 28px 28px;
-      flex: 1; display: flex; flex-direction: column; gap: 10px;
-    }
-    .card-meta {
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .card-num {
-      font-family: 'Inter', sans-serif;
-      font-size: 11px; font-weight: 700;
-      letter-spacing: 0.12em;
-      color: var(--gray-dark3);
-    }
-    .card-year {
-      font-size: 11px; color: var(--gray-dark3); letter-spacing: 0.06em;
-    }
-    .card-title {
-      font-family: 'Noto Sans JP', sans-serif;
-      font-size: clamp(15px, 1.4vw, 19px);
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      line-height: 1.3;
-      color: var(--white);
-    }
-    .card-desc {
-      font-size: 12px;
-      color: var(--gray-main1);
-      line-height: 1.85;
-      flex: 1;
-      letter-spacing: 0.02em;
-    }
-    .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
-    .tag {
-      font-size: 9px; font-weight: 700;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      padding: 4px 10px;
-      border: 1px solid var(--gray-dark3);
-      color: var(--gray-main1);
-      border-radius: 0;
-      transition: border-color 0.2s, color 0.2s;
-    }
-    .tag-accent {
-      border-color: var(--navy);
-      color: rgba(41, 82, 204, 0.9);
-    }
-    .work-card:hover .tag { border-color: var(--gray-dark2); }
-    .work-card:hover .tag-accent { border-color: var(--navy-hover); color: var(--navy-hover); }
-
-    /* ── SKILLS ─────────── 白背景 ──────────────── */
-    .skills {
-      background: var(--white);
-      color: var(--black);
-      padding: 120px var(--side);
-    }
-    .skills-header { margin-bottom: 56px; }
-
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1px;
-      background: var(--gray-light2);
-      border: 1px solid var(--gray-light2);
-      margin-bottom: 1px;
-    }
-    .skill-block {
-      background: var(--white);
-      padding: 36px 28px 40px;
-      transition: background 0.2s;
-    }
-    .skill-block:hover { background: var(--gray-light3); }
-    .sk-cat {
-      font-size: 10px; font-weight: 700;
-      letter-spacing: 0.18em; text-transform: uppercase;
-      color: var(--navy);
-      display: flex; align-items: center; gap: 8px;
-      margin-bottom: 20px;
-    }
-    .sk-cat::after {
-      content: ''; flex: 1; height: 1px; background: var(--gray-light2);
-    }
-    .sk-items { display: flex; flex-direction: column; gap: 11px; }
-    .sk-item {
-      display: flex; align-items: center; gap: 10px;
-      font-size: 13px; letter-spacing: 0.02em; color: var(--gray-dark1);
-    }
-    .sk-item::before {
-      content: ''; flex-shrink: 0;
-      width: 4px; height: 4px; border-radius: 50%;
-      background: var(--gray-light1);
-    }
-
-    /* ── CONTACT ─────────── 黒背景 ──────────────── */
-    .contact {
-      background: var(--black);
-      color: var(--white);
-      padding: 120px var(--side);
-    }
-    .contact-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: start;
-      border: 1px solid var(--gray-dark2);
-      padding: 72px;
-    }
-    .contact-left .section-eyebrow { color: var(--navy); }
-    .contact-left .section-title { color: var(--white); margin-bottom: 20px; }
-    .contact-left p {
-      font-size: 14px; color: var(--gray-main1);
-      line-height: 1.9; letter-spacing: 0.03em;
-      max-width: 36ch;
-    }
-    .contact-right { display: flex; flex-direction: column; gap: 1px; }
-    .contact-link {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 20px 24px;
-      border: 1px solid var(--gray-dark2);
-      text-decoration: none;
-      color: var(--white);
-      font-size: 13px; font-weight: 600;
-      letter-spacing: 0.05em;
-      transition: border-color 0.2s var(--ease-std),
-                  background 0.2s var(--ease-std);
-      margin-bottom: 8px;
-    }
-    .contact-link:hover {
-      border-color: var(--navy);
-      background: rgba(18,64,153,0.08);
-    }
-    .contact-link .cl-left { display: flex; align-items: center; gap: 14px; }
-    .cl-icon {
-      width: 32px; height: 32px;
-      border: 1px solid var(--gray-dark3);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px;
-      transition: border-color 0.2s;
-    }
-    .contact-link:hover .cl-icon { border-color: var(--navy); }
-    .cl-label { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
-    .cl-sub { font-size: 11px; font-weight: 400; color: var(--gray-main1); margin-top: 1px; }
-    .cl-arrow {
-      font-size: 18px; color: var(--gray-dark3);
-      transition: transform 0.25s var(--ease-brand), color 0.2s;
-    }
-    .contact-link:hover .cl-arrow { transform: translate(3px,-3px); color: var(--navy); }
-
-    /* ── FOOTER ─────────── ──────────────────────── */
-    footer {
-      background: var(--black);
-      border-top: 1px solid var(--gray-dark2);
-      padding: 24px var(--side);
-      display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: 8px;
-    }
-    footer .f-left {
-      font-size: 12px; color: var(--gray-dark3); letter-spacing: 0.06em;
-    }
-    footer .f-right {
-      font-size: 11px; color: var(--gray-dark3); letter-spacing: 0.06em;
-    }
-    footer a { color: var(--gray-main1); text-decoration: none; }
-    footer a:hover { color: var(--white); }
-
-    /* ── SCROLL REVEAL ──────────────────────────── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(22px);
-      transition: opacity 0.65s var(--ease-brand),
-                  transform 0.65s var(--ease-brand);
-    }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-    .reveal-d1 { transition-delay: 0.08s; }
-    .reveal-d2 { transition-delay: 0.16s; }
-    .reveal-d3 { transition-delay: 0.24s; }
-    .reveal-d4 { transition-delay: 0.32s; }
-
-    /* ── RESPONSIVE ─────────────────────────────── */
-    @media (max-width: 1024px) {
-      .about-inner { grid-template-columns: 1fr; gap: 48px; }
-      .skills-grid { grid-template-columns: repeat(2, 1fr); }
-      .contact-inner { grid-template-columns: 1fr; padding: 48px; gap: 48px; }
-    }
-    @media (max-width: 768px) {
-      .works-grid { grid-template-columns: 1fr !important; }
-      .work-card { grid-column: span 1 !important; }
-      .nav-links a:not(.nav-cta) { display: none; }
-      .contact-inner { padding: 32px 24px; }
-      .about-stats { grid-template-columns: repeat(3, 1fr); }
-    }
-    @media (max-width: 540px) {
-      .skills-grid { grid-template-columns: 1fr; }
-      .about-stats { grid-template-columns: 1fr 1fr; }
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <!-- ── NAV ─────────────────────────────────── -->
-  <nav id="nav" aria-label="メインナビゲーション">
-    <a class="logo" href="#">reo<span>.</span></a>
-    <div class="nav-links">
-      <a href="#about">About</a>
-      <a href="#works">Works</a>
-      <a href="#skills">Skills</a>
-      <a href="#contact" class="nav-cta">Contact</a>
+  <!-- Navigation -->
+  <nav id="nav">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo">PORTFOLIO</a>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#works">Works</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
     </div>
   </nav>
 
-  <!-- ── HERO ─────────────────────────────────── -->
-  <section class="hero" aria-label="ヒーローセクション">
-    <div class="hero-inner">
-      <div class="hero-eyebrow">AI Developer</div>
-      <h1 class="hero-title">
-        AIで、<br>
-        <span class="muted">体験をつくる。</span>
+  <!-- Hero -->
+  <section id="hero">
+    <div class="hero-content">
+      <p class="hero-eyebrow reveal">AI Developer</p>
+      <h1 class="hero-title reveal">
+        <span class="hero-title-line">Crafting</span>
+        <span class="hero-title-line accent">Intelligent</span>
+        <span class="hero-title-line">Experiences</span>
       </h1>
-      <p class="hero-body">
-        Claude をはじめとする LLM を活用したアプリ・ツール・ゲームを開発しています。
-        アイデアを素早くプロダクトに変えることが得意です。
-      </p>
-      <div class="hero-actions">
-        <a href="#works" class="btn btn-primary">Works を見る</a>
-        <a href="#contact" class="btn btn-ghost">Contact</a>
-      </div>
+      <p class="hero-sub reveal">Claude Codeと共に構築した、AIネイティブな成果物のポートフォリオ</p>
+      <a href="#works" class="btn-primary reveal">Works を見る</a>
     </div>
-    <div class="hero-bg" aria-hidden="true">PORTFOLIO</div>
-    <div class="hero-scroll" aria-hidden="true">Scroll</div>
+    <div class="hero-scroll-hint">
+      <span>SCROLL</span>
+      <div class="scroll-line"></div>
+    </div>
   </section>
 
-  <!-- ── ABOUT ─────────────────────────────────── -->
-  <section class="about" id="about" aria-label="自己紹介">
+  <!-- About -->
+  <section id="about">
     <div class="about-inner">
-      <div class="about-left">
-        <div class="section-eyebrow reveal">About</div>
-        <h2 class="section-title reveal reveal-d1">AIで<br>できることを<br>広げていく。</h2>
-      </div>
-      <div class="about-right">
-        <p class="about-lead reveal">
-          Claude Code を主な開発環境として、LLM を活用したプロダクト開発を行っています。
-          ゲーム・モバイルアプリ・AI自動化ツールと、領域を問わず実験と実装を繰り返しています。
-        </p>
-        <p class="about-body reveal reveal-d1">
-          「AIを使って何を作れるか」を日々探求し、アイデアを素早くプロトタイプに落とし込むのが得意です。
-          SubAgents や Skills の設計など、Claude Code の拡張機能の活用にも力を入れています。
-          作ったものはすべて動くものとして完成させることをポリシーにしています。
-        </p>
-        <div class="about-stats reveal reveal-d2">
-          <div class="stat-item">
-            <div class="stat-num">6<span>+</span></div>
-            <div class="stat-label">Projects</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-num">3<span>+</span></div>
-            <div class="stat-label">Platforms</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-num">2026</div>
-            <div class="stat-label">Active</div>
-          </div>
+      <div class="about-label reveal">About</div>
+      <div class="about-body">
+        <h2 class="about-heading reveal">AIと共に、<br>アイデアをプロダクトへ。</h2>
+        <div class="about-text reveal">
+          <p>Claude Codeを活用し、ゲーム・モバイルアプリ・AIエージェント・Webツールまで幅広い成果物を制作しています。</p>
+          <p>アイデアを素早くプロトタイプに落とし込み、実際に動くものを作ることを重視しています。</p>
+        </div>
+        <div class="about-tags reveal">
+          <span class="tag">Claude Code</span>
+          <span class="tag">AI Agent</span>
+          <span class="tag">Web Dev</span>
+          <span class="tag">Mobile App</span>
+          <span class="tag">Game Dev</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ── WORKS ─────────────────────────────────── -->
-  <section class="works" id="works" aria-label="制作実績">
-    <div class="works-header">
-      <div>
-        <div class="section-eyebrow reveal">Works</div>
-        <h2 class="section-title reveal reveal-d1">制作実績</h2>
-      </div>
-      <div class="works-count reveal">06 Projects</div>
+  <!-- Works -->
+  <section id="works">
+    <div class="works-header reveal">
+      <p class="section-eyebrow">Works</p>
+      <h2 class="section-title">Selected Projects</h2>
     </div>
-
     <div class="works-grid">
 
-      <article class="work-card reveal">
-        <div class="card-thumb">
-          <img src="images/tetris.png" alt="テトリス ゲーム画面" loading="lazy">
-          <div class="card-overlay"><span class="card-overlay-label">View Project</span></div>
+      <article class="work-card reveal" data-index="0">
+        <div class="card-image">
+          <img src="images/tetris.png" alt="Tetris ブラウザゲーム" loading="lazy">
+          <div class="card-overlay">
+            <button class="card-expand" aria-label="詳細を見る">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 3h5M3 3v5M17 3h-5M17 3v5M3 17h5M3 17v-5M17 17h-5M17 17v-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </button>
+          </div>
         </div>
         <div class="card-body">
-          <div class="card-meta">
-            <span class="card-num">01</span>
-            <span class="card-year">2026</span>
-          </div>
-          <h3 class="card-title">テトリス</h3>
-          <p class="card-desc">
-            ネオンダークテーマで制作したブラウザ動作のテトリス。
-            ホールド・ハードドロップ・コンボ機能を搭載し、スコア・レベル・タイムを記録。
-          </p>
-          <div class="card-tags">
-            <span class="tag">JavaScript</span>
-            <span class="tag">Canvas API</span>
-            <span class="tag tag-accent">Game</span>
-          </div>
+          <span class="card-tag">Game</span>
+          <h3 class="card-title">Tetris</h3>
+          <p class="card-desc">AIと対話しながら制作したネオンスタイルのブラウザ型テトリス。スコア・レベル・コンボシステムを実装。</p>
         </div>
       </article>
 
-      <article class="work-card reveal reveal-d1">
-        <div class="card-thumb">
-          <img src="images/seo-agent.png" alt="SEO分析サブエージェント 実行画面" loading="lazy">
-          <div class="card-overlay"><span class="card-overlay-label">View Project</span></div>
+      <article class="work-card reveal" data-index="1">
+        <div class="card-image">
+          <img src="images/ai-diary.png" alt="AI絵日記 モバイルアプリ" loading="lazy">
+          <div class="card-overlay">
+            <button class="card-expand" aria-label="詳細を見る">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 3h5M3 3v5M17 3h-5M17 3v5M3 17h5M3 17v-5M17 17h-5M17 17v-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </button>
+          </div>
         </div>
         <div class="card-body">
-          <div class="card-meta">
-            <span class="card-num">02</span>
-            <span class="card-year">2026</span>
-          </div>
-          <h3 class="card-title">SEO 分析<br>サブエージェント</h3>
-          <p class="card-desc">
-            Claude Code 上で動くAI自動化エージェント。URL を渡すだけで
-            分析 → 改善案 → 最終レポートを自動出力。
-          </p>
-          <div class="card-tags">
-            <span class="tag">Claude API</span>
-            <span class="tag">Agents SDK</span>
-            <span class="tag tag-accent">AI Automation</span>
-          </div>
+          <span class="card-tag">Mobile App</span>
+          <h3 class="card-title">AI絵日記</h3>
+          <p class="card-desc">今日あったことを話しかけると、AIが絵日記を自動生成するモバイルアプリ。音声入力対応。</p>
         </div>
       </article>
 
-      <article class="work-card reveal reveal-d2">
-        <div class="card-thumb mobile-app">
-          <img src="images/ai-diary.png" alt="AI絵日記 モバイルアプリ画面" loading="lazy">
-          <div class="card-overlay"><span class="card-overlay-label">View Project</span></div>
+      <article class="work-card reveal" data-index="2">
+        <div class="card-image">
+          <img src="images/seo-agent.png" alt="SEO分析サブエージェント" loading="lazy">
+          <div class="card-overlay">
+            <button class="card-expand" aria-label="詳細を見る">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 3h5M3 3v5M17 3h-5M17 3v5M3 17h5M3 17v-5M17 17h-5M17 17v-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </button>
+          </div>
         </div>
         <div class="card-body">
-          <div class="card-meta">
-            <span class="card-num">03</span>
-            <span class="card-year">2026</span>
-          </div>
-          <h3 class="card-title">AI 絵日記</h3>
-          <p class="card-desc">
-            今日あったことを話すと、AI が絵日記を生成するモバイルアプリ。
-            音声 → テキスト → イラスト変換のパイプラインを実装。
-          </p>
-          <div class="card-tags">
-            <span class="tag">Swift</span>
-            <span class="tag">SwiftUI</span>
-            <span class="tag">Claude API</span>
-            <span class="tag tag-accent">Mobile App</span>
-          </div>
+          <span class="card-tag">AI Agent</span>
+          <h3 class="card-title">SEO分析サブエージェント</h3>
+          <p class="card-desc">Claude CodeのSub Agentとして動作するSEO分析AI。URLを渡すだけでSEO課題を診断・改善提案まで実行。</p>
         </div>
       </article>
 
-      <article class="work-card reveal reveal-d1">
-        <div class="card-thumb">
-          <img src="images/blog-writer.png" alt="SEOブログ記事自動生成エージェント実行画面" loading="lazy">
-          <div class="card-overlay"><span class="card-overlay-label">View Project</span></div>
+      <article class="work-card reveal" data-index="3">
+        <div class="card-image">
+          <img src="images/char-counter.png" alt="文字数カウンタースキル" loading="lazy">
+          <div class="card-overlay">
+            <button class="card-expand" aria-label="詳細を見る">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 3h5M3 3v5M17 3h-5M17 3v5M3 17h5M3 17v-5M17 17h-5M17 17v-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </button>
+          </div>
         </div>
         <div class="card-body">
-          <div class="card-meta">
-            <span class="card-num">04</span>
-            <span class="card-year">2026</span>
-          </div>
-          <h3 class="card-title">SEO ブログ記事<br>自動生成エージェント</h3>
-          <p class="card-desc">
-            キーワードを渡すだけで競合分析 → 構成設計 → 本文執筆 → タイトル選定まで
-            自動で行う Claude Code エージェント。
-          </p>
-          <div class="card-tags">
-            <span class="tag">Claude API</span>
-            <span class="tag">SubAgents</span>
-            <span class="tag">Skills</span>
-            <span class="tag tag-accent">AI Writing</span>
-          </div>
+          <span class="card-tag">Tool</span>
+          <h3 class="card-title">文字数カウンタースキル</h3>
+          <p class="card-desc">Claude Code Skills として実装した文字数計測ツール。4パターンの集計をビジュアライズして出力。</p>
         </div>
       </article>
 
-      <article class="work-card reveal reveal-d2">
-        <div class="card-thumb">
-          <img src="images/char-counter.png" alt="文字数カウントツール画面" loading="lazy">
-          <div class="card-overlay"><span class="card-overlay-label">View Project</span></div>
+      <article class="work-card reveal" data-index="4">
+        <div class="card-image">
+          <img src="images/claude-business.png" alt="Claude Code 業務活用記事" loading="lazy">
+          <div class="card-overlay">
+            <button class="card-expand" aria-label="詳細を見る">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 3h5M3 3v5M17 3h-5M17 3v5M3 17h5M3 17v-5M17 17h-5M17 17v-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </button>
+          </div>
         </div>
         <div class="card-body">
-          <div class="card-meta">
-            <span class="card-num">05</span>
-            <span class="card-year">2026</span>
-          </div>
-          <h3 class="card-title">文字数カウント<br>ツール</h3>
-          <p class="card-desc">
-            改行あり/なし・スペースあり/なしの4パターンで瞬時に文字数を計測する
-            Claude Code スキル。ライティング業務の効率化に対応。
-          </p>
-          <div class="card-tags">
-            <span class="tag">Claude Code</span>
-            <span class="tag">Skills</span>
-            <span class="tag tag-accent">Productivity</span>
-          </div>
+          <span class="card-tag">Article</span>
+          <h3 class="card-title">Claude Code 業務活用</h3>
+          <p class="card-desc">Claude Codeを使って日常業務を効率化する実践事例をまとめた記事。SEO最適化も実施。</p>
         </div>
       </article>
 
-      <article class="work-card reveal reveal-d3">
-        <div class="card-thumb">
-          <img src="images/subagents.png" alt="SubAgents / Skills 設計画面" loading="lazy">
-          <div class="card-overlay"><span class="card-overlay-label">View Project</span></div>
+      <article class="work-card reveal" data-index="5">
+        <div class="card-image">
+          <img src="images/subagents-guide.png" alt="SubAgents/Skills 活用ガイド" loading="lazy">
+          <div class="card-overlay">
+            <button class="card-expand" aria-label="詳細を見る">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 3h5M3 3v5M17 3h-5M17 3v5M3 17h5M3 17v-5M17 17h-5M17 17v-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </button>
+          </div>
         </div>
         <div class="card-body">
-          <div class="card-meta">
-            <span class="card-num">06</span>
-            <span class="card-year">2026</span>
-          </div>
-          <h3 class="card-title">SubAgents /<br>Skills 設計</h3>
-          <p class="card-desc">
-            Claude Code の SubAgents・Skills・Commands を組み合わせた
-            AI ワークフローのアーキテクチャ設計と実装。再利用可能な方法論を構築。
-          </p>
-          <div class="card-tags">
-            <span class="tag">Claude Code</span>
-            <span class="tag">SubAgents</span>
-            <span class="tag tag-accent">Architecture</span>
-          </div>
+          <span class="card-tag">Article</span>
+          <h3 class="card-title">SubAgents / Skills ガイド</h3>
+          <p class="card-desc">Claude CodeのSubAgentsとSkillsの設計思想・実装パターンを体系的に解説したテクニカルガイド。</p>
         </div>
       </article>
 
     </div>
   </section>
 
-  <!-- ── SKILLS ─────────────────────────────────── -->
-  <section class="skills" id="skills" aria-label="技術スタック">
-    <div class="skills-header">
-      <div class="section-eyebrow reveal">Skills</div>
-      <h2 class="section-title reveal reveal-d1">技術スタック</h2>
-    </div>
-    <div class="skills-grid">
-      <div class="skill-block reveal">
-        <div class="sk-cat">AI / LLM</div>
-        <div class="sk-items">
-          <span class="sk-item">Claude API</span>
-          <span class="sk-item">Agents SDK</span>
-          <span class="sk-item">MCP</span>
-          <span class="sk-item">Prompt 設計</span>
-          <span class="sk-item">SubAgents / Skills</span>
-        </div>
-      </div>
-      <div class="skill-block reveal reveal-d1">
-        <div class="sk-cat">Frontend</div>
-        <div class="sk-items">
-          <span class="sk-item">HTML / CSS</span>
-          <span class="sk-item">JavaScript</span>
-          <span class="sk-item">React</span>
-          <span class="sk-item">Canvas API</span>
-        </div>
-      </div>
-      <div class="skill-block reveal reveal-d2">
-        <div class="sk-cat">Mobile</div>
-        <div class="sk-items">
-          <span class="sk-item">Swift</span>
-          <span class="sk-item">SwiftUI</span>
-          <span class="sk-item">iOS</span>
-        </div>
-      </div>
-      <div class="skill-block reveal reveal-d3">
-        <div class="sk-cat">Tools</div>
-        <div class="sk-items">
-          <span class="sk-item">Claude Code</span>
-          <span class="sk-item">Git / GitHub</span>
-          <span class="sk-item">Figma</span>
-          <span class="sk-item">Python</span>
-        </div>
-      </div>
+  <!-- Contact -->
+  <section id="contact">
+    <div class="contact-inner">
+      <p class="section-eyebrow dark reveal">Contact</p>
+      <h2 class="contact-heading reveal">一緒に何か<br>作りませんか。</h2>
+      <p class="contact-sub reveal">AIを活用したプロダクト開発・コンテンツ制作についてお気軽にご連絡ください。</p>
+      <a href="mailto:l7eo.ma4tsu@gmail.com" class="btn-primary dark reveal">メールを送る</a>
     </div>
   </section>
 
-  <!-- ── CONTACT ─────────────────────────────────── -->
-  <section class="contact" id="contact" aria-label="お問い合わせ">
-    <div class="contact-inner reveal">
-      <div class="contact-left">
-        <div class="section-eyebrow">Contact</div>
-        <h2 class="section-title">お仕事・<br>コラボのご相談</h2>
-        <p>AI を活用したプロダクト開発、ツール制作についてお気軽にどうぞ。<br>まずはメールやSNSでご連絡ください。</p>
-      </div>
-      <div class="contact-right">
-        <a href="mailto:l7eo.ma4tsu@gmail.com" class="contact-link">
-          <div class="cl-left">
-            <div class="cl-icon">✉</div>
-            <div>
-              <div class="cl-label">Email</div>
-              <div class="cl-sub">l7eo.ma4tsu@gmail.com</div>
-            </div>
-          </div>
-          <span class="cl-arrow">↗</span>
-        </a>
-        <a href="https://github.com/l7eoma4tsu-collab" class="contact-link" target="_blank" rel="noopener">
-          <div class="cl-left">
-            <div class="cl-icon">⚙</div>
-            <div>
-              <div class="cl-label">GitHub</div>
-              <div class="cl-sub">l7eoma4tsu-collab</div>
-            </div>
-          </div>
-          <span class="cl-arrow">↗</span>
-        </a>
-        <a href="https://x.com" class="contact-link" target="_blank" rel="noopener">
-          <div class="cl-left">
-            <div class="cl-icon">𝕏</div>
-            <div>
-              <div class="cl-label">Twitter / X</div>
-              <div class="cl-sub">DM 歓迎</div>
-            </div>
-          </div>
-          <span class="cl-arrow">↗</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── FOOTER ─────────────────────────────────── -->
+  <!-- Footer -->
   <footer>
-    <span class="f-left">© 2026 reo</span>
-    <span class="f-right">Built with <a href="https://claude.ai/code" target="_blank" rel="noopener">Claude Code</a></span>
+    <div class="footer-inner">
+      <span class="footer-logo">PORTFOLIO</span>
+      <span class="footer-copy">© 2026 reo. Built with Claude Code.</span>
+    </div>
   </footer>
 
-  <script>
-    // NAV scroll
-    const nav = document.getElementById('nav');
-    const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 48);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
+  <!-- Modal -->
+  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-label="プロジェクト詳細">
+    <button class="modal-close" id="modal-close" aria-label="閉じる">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+    <div class="modal-img-wrap">
+      <img id="modal-img" src="" alt="">
+    </div>
+  </div>
+  <div id="modal-overlay" class="modal-overlay"></div>
 
-    // Reveal animation
-    const revealEls = document.querySelectorAll('.reveal');
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible');
-          io.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-    revealEls.forEach(el => {
-      // Hero elements: show immediately
-      if (el.closest('.hero')) {
-        el.classList.add('visible');
-      } else {
-        io.observe(el);
-      }
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
