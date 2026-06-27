@@ -30,7 +30,7 @@
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'Noto Sans JP', system-ui, sans-serif;
   font-size: 16px;
   line-height: 1.6;
   color: var(--black);
@@ -123,13 +123,6 @@ a { text-decoration: none; }
   align-items: center;
   padding: 0 var(--side-margin);
   overflow: hidden;
-}
-#hero::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(ellipse 60% 60% at 72% 50%, rgba(18,64,153,0.14) 0%, transparent 70%);
-  pointer-events: none;
 }
 .hero-content {
   position: relative;
@@ -452,7 +445,7 @@ footer {
   max-width: 900px;
   width: 100%;
   overflow: hidden;
-  border-radius: 4px;
+  border-radius: 0;
 }
 .modal-img-wrap img {
   width: 100%;
