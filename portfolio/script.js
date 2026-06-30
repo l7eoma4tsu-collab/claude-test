@@ -1,6 +1,17 @@
 // @ts-check
 
 // ─────────────────────────────────────────
+// ERR-5: surface otherwise-silent runtime failures to the console so they
+// are discoverable in error monitoring / devtools instead of vanishing.
+// ─────────────────────────────────────────
+window.addEventListener('error', (e) => {
+  console.error('Unhandled error:', e.error ?? e.message);
+});
+window.addEventListener('unhandledrejection', (e) => {
+  console.error('Unhandled promise rejection:', e.reason);
+});
+
+// ─────────────────────────────────────────
 // Type aliases (JSDoc)
 // ─────────────────────────────────────────
 
@@ -31,6 +42,18 @@ const modalOverlay = getById('modal-overlay');
 const modalImg    = /** @type {HTMLImageElement | null} */ (getById('modal-img'));
 const modalClose  = getById('modal-close');
 const contactLink = getById('contact-link');
+
+// ERR-4: if the modal image fails to load, show a text fallback instead of
+// the browser's broken-image icon.
+modalImg?.addEventListener('error', () => {
+  if (!modalImg) return;
+  modalImg.alt = '画像を読み込めませんでした';
+  modalImg.style.display = 'none';
+});
+modalImg?.addEventListener('load', () => {
+  if (!modalImg) return;
+  modalImg.style.display = '';
+});
 
 // ─────────────────────────────────────────
 // Email obfuscation (S-1)

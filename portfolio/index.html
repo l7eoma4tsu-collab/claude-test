@@ -7,7 +7,7 @@
         content="default-src 'self';
                  style-src 'self' https://fonts.googleapis.com;
                  font-src https://fonts.gstatic.com;
-                 img-src 'self' data:;
+                 img-src 'self';
                  script-src 'self';
                  object-src 'none';
                  base-uri 'self';
@@ -21,6 +21,19 @@
 </head>
 <body>
 
+  <!-- A11Y-7: skip link, visually hidden until focused -->
+  <a href="#main" class="skip-link">メインコンテンツへスキップ</a>
+
+  <!-- PERF-5: shared SVG sprite, referenced via <use> instead of duplicating markup per card -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="icon-expand" viewBox="0 0 20 20" fill="none">
+      <path d="M3 3h5M3 3v5M17 3h-5M17 3v5M3 17h5M3 17v-5M17 17h-5M17 17v-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-close" viewBox="0 0 24 24" fill="none">
+      <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </symbol>
+  </svg>
+
   <!-- Navigation -->
   <nav id="nav">
     <div class="nav-inner">
@@ -33,6 +46,7 @@
     </div>
   </nav>
 
+  <main id="main">
   <!-- Hero -->
   <section id="hero">
     <div class="hero-content">
@@ -84,8 +98,8 @@
         <div class="card-image">
           <img src="images/tetris.png" alt="Tetris ブラウザゲーム" width="800" height="600" loading="lazy">
           <div class="card-overlay">
-            <button class="card-expand" aria-label="詳細を見る">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 3h5M3 3v5M17 3h-5M17 3v5M3 17h5M3 17v-5M17 17h-5M17 17v-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <button class="card-expand" tabindex="-1" aria-hidden="true">
+              <svg width="20" height="20"><use href="#icon-expand"></use></svg>
             </button>
           </div>
         </div>
@@ -100,8 +114,8 @@
         <div class="card-image">
           <img src="images/ai-diary.png" alt="AI絵日記 モバイルアプリ" width="800" height="600" loading="lazy">
           <div class="card-overlay">
-            <button class="card-expand" aria-label="詳細を見る">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 3h5M3 3v5M17 3h-5M17 3v5M3 17h5M3 17v-5M17 17h-5M17 17v-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <button class="card-expand" tabindex="-1" aria-hidden="true">
+              <svg width="20" height="20"><use href="#icon-expand"></use></svg>
             </button>
           </div>
         </div>
@@ -116,8 +130,8 @@
         <div class="card-image">
           <img src="images/seo-agent.png" alt="SEO分析サブエージェント" width="800" height="600" loading="lazy">
           <div class="card-overlay">
-            <button class="card-expand" aria-label="詳細を見る">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 3h5M3 3v5M17 3h-5M17 3v5M3 17h5M3 17v-5M17 17h-5M17 17v-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <button class="card-expand" tabindex="-1" aria-hidden="true">
+              <svg width="20" height="20"><use href="#icon-expand"></use></svg>
             </button>
           </div>
         </div>
@@ -132,8 +146,8 @@
         <div class="card-image">
           <img src="images/char-counter.png" alt="文字数カウンタースキル" width="800" height="600" loading="lazy">
           <div class="card-overlay">
-            <button class="card-expand" aria-label="詳細を見る">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 3h5M3 3v5M17 3h-5M17 3v5M3 17h5M3 17v-5M17 17h-5M17 17v-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <button class="card-expand" tabindex="-1" aria-hidden="true">
+              <svg width="20" height="20"><use href="#icon-expand"></use></svg>
             </button>
           </div>
         </div>
@@ -148,8 +162,8 @@
         <div class="card-image">
           <img src="images/claude-business.png" alt="Claude Code 業務活用記事" width="800" height="600" loading="lazy">
           <div class="card-overlay">
-            <button class="card-expand" aria-label="詳細を見る">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 3h5M3 3v5M17 3h-5M17 3v5M3 17h5M3 17v-5M17 17h-5M17 17v-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <button class="card-expand" tabindex="-1" aria-hidden="true">
+              <svg width="20" height="20"><use href="#icon-expand"></use></svg>
             </button>
           </div>
         </div>
@@ -164,8 +178,8 @@
         <div class="card-image">
           <img src="images/subagents-guide.png" alt="SubAgents/Skills 活用ガイド" width="800" height="600" loading="lazy">
           <div class="card-overlay">
-            <button class="card-expand" aria-label="詳細を見る">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 3h5M3 3v5M17 3h-5M17 3v5M3 17h5M3 17v-5M17 17h-5M17 17v-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <button class="card-expand" tabindex="-1" aria-hidden="true">
+              <svg width="20" height="20"><use href="#icon-expand"></use></svg>
             </button>
           </div>
         </div>
@@ -188,6 +202,7 @@
       <a href="#" id="contact-link" class="btn-primary dark reveal" aria-label="メールで連絡する">メールを送る</a>
     </div>
   </section>
+  </main>
 
   <!-- Footer -->
   <footer>
@@ -200,7 +215,7 @@
   <!-- Modal -->
   <div id="modal" class="modal" role="dialog" aria-modal="true" aria-label="プロジェクト詳細">
     <button class="modal-close" id="modal-close" aria-label="閉じる">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <svg width="24" height="24"><use href="#icon-close"></use></svg>
     </button>
     <div class="modal-img-wrap">
       <img id="modal-img" alt="">

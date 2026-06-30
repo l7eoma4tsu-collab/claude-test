@@ -53,6 +53,24 @@ body {
 img { display: block; width: 100%; height: 100%; object-fit: cover; }
 a { text-decoration: none; }
 
+/* A11Y-7: skip link — hidden off-screen until keyboard focus reveals it */
+.skip-link {
+  position: absolute;
+  top: -48px;
+  left: 12px;
+  z-index: 300;
+  background: var(--navy);
+  color: var(--white);
+  padding: 12px 20px;
+  border-radius: 2px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: top var(--dur-fast) var(--ease-std);
+}
+.skip-link:focus {
+  top: 12px;
+}
+
 /* ── Reveal animation ── */
 .reveal {
   opacity: 0;
@@ -337,20 +355,17 @@ a { text-decoration: none; }
               background var(--dur-fast) var(--ease-std);
 }
 .work-card:hover .card-expand,
-.work-card:focus-visible .card-expand,
-.card-expand:focus-visible {
+.work-card:focus-visible .card-expand {
   opacity: 1;
   transform: scale(1);
 }
 .card-expand:hover { background: rgba(255,255,255,0.26); }
 
+/* A11Y-9: card-expand is now decorative (tabindex="-1", aria-hidden) —
+   the parent .work-card is the single focusable control per card */
 .work-card:focus-visible {
   outline: 2px solid var(--white);
   outline-offset: -2px;
-}
-.card-expand:focus-visible {
-  outline: 2px solid var(--white);
-  outline-offset: 2px;
 }
 
 .card-body {
