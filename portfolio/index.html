@@ -9,7 +9,9 @@
                  font-src https://fonts.gstatic.com;
                  img-src 'self' data:;
                  script-src 'self';
-                 object-src 'none';">
+                 object-src 'none';
+                 base-uri 'self';
+                 form-action 'self';">
   <title>AI Developer Portfolio</title>
   <meta name="description" content="Claude Codeを活用したAI開発の実績をまとめたポートフォリオ。ゲーム・モバイルアプリ・AIエージェント・Webツールを制作。">
   <link rel="stylesheet" href="style.css">
@@ -78,7 +80,7 @@
     </div>
     <div class="works-grid">
 
-      <article class="work-card reveal" data-index="0">
+      <article class="work-card reveal" data-index="0" tabindex="0" role="button" aria-label="Tetris の詳細画像を見る">
         <div class="card-image">
           <img src="images/tetris.png" alt="Tetris ブラウザゲーム" width="800" height="600" loading="lazy">
           <div class="card-overlay">
@@ -94,7 +96,7 @@
         </div>
       </article>
 
-      <article class="work-card reveal" data-index="1">
+      <article class="work-card reveal" data-index="1" tabindex="0" role="button" aria-label="AI絵日記 の詳細画像を見る">
         <div class="card-image">
           <img src="images/ai-diary.png" alt="AI絵日記 モバイルアプリ" width="800" height="600" loading="lazy">
           <div class="card-overlay">
@@ -110,7 +112,7 @@
         </div>
       </article>
 
-      <article class="work-card reveal" data-index="2">
+      <article class="work-card reveal" data-index="2" tabindex="0" role="button" aria-label="SEO分析サブエージェント の詳細画像を見る">
         <div class="card-image">
           <img src="images/seo-agent.png" alt="SEO分析サブエージェント" width="800" height="600" loading="lazy">
           <div class="card-overlay">
@@ -126,7 +128,7 @@
         </div>
       </article>
 
-      <article class="work-card reveal" data-index="3">
+      <article class="work-card reveal" data-index="3" tabindex="0" role="button" aria-label="文字数カウンタースキル の詳細画像を見る">
         <div class="card-image">
           <img src="images/char-counter.png" alt="文字数カウンタースキル" width="800" height="600" loading="lazy">
           <div class="card-overlay">
@@ -142,7 +144,7 @@
         </div>
       </article>
 
-      <article class="work-card reveal" data-index="4">
+      <article class="work-card reveal" data-index="4" tabindex="0" role="button" aria-label="Claude Code 業務活用 の詳細画像を見る">
         <div class="card-image">
           <img src="images/claude-business.png" alt="Claude Code 業務活用記事" width="800" height="600" loading="lazy">
           <div class="card-overlay">
@@ -158,7 +160,7 @@
         </div>
       </article>
 
-      <article class="work-card reveal" data-index="5">
+      <article class="work-card reveal" data-index="5" tabindex="0" role="button" aria-label="SubAgents / Skills ガイド の詳細画像を見る">
         <div class="card-image">
           <img src="images/subagents-guide.png" alt="SubAgents/Skills 活用ガイド" width="800" height="600" loading="lazy">
           <div class="card-overlay">

@@ -6,6 +6,9 @@
   --white:        #ffffff;
   --navy:         #124099;
   --navy-hover:   #2952cc;
+  /* A11Y-4/A11Y-5: lighter blue used only for text on dark backgrounds —
+     #6f9bff is ~5.4:1 on #000 and ~4.7:1 on --gray-dark1, meeting WCAG AA */
+  --navy-accent-text: #6f9bff;
   --gray-dark1:   #131314;
   --gray-dark2:   #2b2e33;
   --gray-dark3:   #3c4047;
@@ -14,6 +17,8 @@
   --gray-light1:  #a9adb8;
   --gray-light2:  #dadde5;
   --gray-light3:  #edeef2;
+  /* A11Y-3: lighter gray for low-emphasis text on --black, ~4.6:1 contrast */
+  --gray-text-dim: #8b909a;
 
   --ease-brand:   cubic-bezier(0.56, -0.01, 0.32, 0.99);
   --ease-std:     cubic-bezier(0.4, 0, 0.2, 1);
@@ -142,7 +147,7 @@ a { text-decoration: none; }
   font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--navy-hover);
+  color: var(--navy-accent-text);
   margin-bottom: 24px;
 }
 .hero-title {
@@ -176,7 +181,7 @@ a { text-decoration: none; }
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  color: var(--gray-dark3);
+  color: var(--gray-text-dim);
   font-size: 0.62rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -261,7 +266,7 @@ a { text-decoration: none; }
   font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--navy-hover);
+  color: var(--navy-accent-text);
   margin-bottom: 14px;
 }
 .section-eyebrow.dark { color: var(--navy); }
@@ -331,11 +336,22 @@ a { text-decoration: none; }
               transform var(--dur-fast) var(--ease-brand),
               background var(--dur-fast) var(--ease-std);
 }
-.work-card:hover .card-expand {
+.work-card:hover .card-expand,
+.work-card:focus-visible .card-expand,
+.card-expand:focus-visible {
   opacity: 1;
   transform: scale(1);
 }
 .card-expand:hover { background: rgba(255,255,255,0.26); }
+
+.work-card:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: -2px;
+}
+.card-expand:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: 2px;
+}
 
 .card-body {
   padding: 20px 22px 26px;
@@ -349,7 +365,7 @@ a { text-decoration: none; }
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--navy-hover);
+  color: var(--navy-accent-text);
 }
 .card-title {
   font-size: 1.05rem;
@@ -412,7 +428,7 @@ footer {
 }
 .footer-copy {
   font-size: 0.76rem;
-  color: var(--gray-dark3);
+  color: var(--gray-text-dim);
 }
 
 /* =====================================================
