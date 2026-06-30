@@ -1,6 +1,17 @@
 // @ts-check
 
 // ─────────────────────────────────────────
+// ERR-5: surface otherwise-silent runtime failures to the console so they
+// are discoverable in error monitoring / devtools instead of vanishing.
+// ─────────────────────────────────────────
+window.addEventListener('error', (e) => {
+  console.error('Unhandled error:', e.error ?? e.message);
+});
+window.addEventListener('unhandledrejection', (e) => {
+  console.error('Unhandled promise rejection:', e.reason);
+});
+
+// ─────────────────────────────────────────
 // Type aliases (JSDoc)
 // ─────────────────────────────────────────
 
@@ -13,29 +24,43 @@
 // ─────────────────────────────────────────
 
 /**
- * @template {HTMLElement} T
+ * Null-safe element lookup. Returns null instead of throwing so that a
+ * missing id only disables the feature that depends on it, rather than
+ * aborting the entire script (ERR-1).
+ * @template {HTMLElement} [T=HTMLElement]
  * @param {string} id
- * @param {{ new(): T }} [_type]
- * @returns {T}
+ * @returns {T | null}
  */
-function getById(id, _type) {
+function getById(id) {
   const el = document.getElementById(id);
-  if (!el) throw new Error(`Element #${id} not found`);
-  return /** @type {T} */ (el);
+  return /** @type {T | null} */ (el);
 }
 
 const nav         = getById('nav');
 const modal       = getById('modal');
 const modalOverlay = getById('modal-overlay');
-const modalImg    = /** @type {HTMLImageElement} */ (getById('modal-img'));
+const modalImg    = /** @type {HTMLImageElement | null} */ (getById('modal-img'));
 const modalClose  = getById('modal-close');
 const contactLink = getById('contact-link');
+
+// ERR-4: if the modal image fails to load, show a text fallback instead of
+// the browser's broken-image icon.
+modalImg?.addEventListener('error', () => {
+  if (!modalImg) return;
+  modalImg.alt = '画像を読み込めませんでした';
+  modalImg.style.display = 'none';
+});
+modalImg?.addEventListener('load', () => {
+  if (!modalImg) return;
+  modalImg.style.display = '';
+});
 
 // ─────────────────────────────────────────
 // Email obfuscation (S-1)
 // Split across variables so bots cannot harvest with a plain regex
 // ─────────────────────────────────────────
 (function setupContactLink() {
+  if (!contactLink) return;
   const user   = 'l7eo.ma4tsu';
   const domain = 'gmail.com';
   contactLink.addEventListener('click', (e) => {
@@ -47,30 +72,45 @@ const contactLink = getById('contact-link');
 // ─────────────────────────────────────────
 // Navigation — scroll state
 // ─────────────────────────────────────────
-window.addEventListener('scroll', () => {
-  nav.classList.toggle('scrolled', window.scrollY > 40);
-}, { passive: true });
+if (nav) {
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+}
 
 // ─────────────────────────────────────────
 // Reveal on scroll
+// PERF-2: stagger index is computed once per group up front instead of
+// re-querying the DOM inside every IntersectionObserver callback.
 // ─────────────────────────────────────────
 (function initReveal() {
-  const els = document.querySelectorAll('.reveal');
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      const siblings = /** @type {HTMLElement[]} */ (
-        [...entry.target.parentElement?.querySelectorAll('.reveal:not(.visible)') ?? []]
-      );
-      const idx = siblings.indexOf(/** @type {HTMLElement} */ (entry.target));
-      /** @type {HTMLElement} */ (entry.target).style.transitionDelay = `${idx * 0.08}s`;
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
+  try {
+    /** @type {Map<Element, number>} */
+    const staggerIndex = new Map();
+    const groups = new Map();
+    document.querySelectorAll('.reveal').forEach((el) => {
+      const parent = el.parentElement;
+      if (!groups.has(parent)) groups.set(parent, []);
+      groups.get(parent).push(el);
     });
-  }, { threshold: 0.12 });
+    groups.forEach((siblings) => {
+      siblings.forEach((el, idx) => staggerIndex.set(el, idx));
+    });
 
-  els.forEach((el) => observer.observe(el));
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const idx = staggerIndex.get(entry.target) ?? 0;
+        /** @type {HTMLElement} */ (entry.target).style.transitionDelay = `${idx * 0.08}s`;
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.12 });
+
+    staggerIndex.forEach((_idx, el) => observer.observe(el));
+  } catch (err) {
+    console.error('reveal init failed', err);
+  }
 })();
 
 // ─────────────────────────────────────────
@@ -84,8 +124,10 @@ const FOCUSABLE = 'button, [href], input, select, textarea, [tabindex]:not([tabi
 
 /** @param {KeyboardEvent} e */
 function trapFocus(e) {
-  if (e.key !== 'Tab') return;
+  if (e.key !== 'Tab' || !modal) return;
   const focusable = /** @type {HTMLElement[]} */ ([...modal.querySelectorAll(FOCUSABLE)]);
+  // ERR-2: nothing focusable inside the modal — nothing to trap, bail out safely
+  if (focusable.length === 0) return;
   const first = focusable[0];
   const last  = focusable[focusable.length - 1];
   if (e.shiftKey) {
@@ -95,12 +137,25 @@ function trapFocus(e) {
   }
 }
 
-/** @param {ModalImage} image */
+// SEC-1: allow-list only relative paths / http(s) URLs instead of a single
+// `javascript:` regex, which is bypassable with tabs/newlines or other
+// dangerous schemes (data:, vbscript:, etc.)
+const SAFE_SRC_RE = /^(?:https?:\/\/|\.{0,2}\/|[\w-]+\/)/i;
+
+/**
+ * @param {ModalImage} image
+ * @returns {boolean} true if the image was accepted and rendered
+ */
 function setModalContent({ src, alt }) {
-  // S-4: reject non-relative and non-https URLs to block javascript: injection
-  if (/^javascript:/i.test(src)) return;
+  if (!modalImg) return false;
+  if (!SAFE_SRC_RE.test(src)) {
+    // ERR-3: surface the rejection instead of failing silently
+    console.error(`Blocked unsafe modal image src: ${src}`);
+    return false;
+  }
   modalImg.src = src;
   modalImg.alt = alt;
+  return true;
 }
 
 /** @param {HTMLElement} trigger */
@@ -117,15 +172,20 @@ function unlockScroll() {
 
 /** @param {ModalImage & { trigger: HTMLElement }} options */
 function openModal({ src, alt, trigger }) {
-  setModalContent({ src, alt });
+  if (!modal || !modalOverlay) return;
+  const accepted = setModalContent({ src, alt });
+  if (!accepted) return;
+  // A11Y-6: tie the dialog's accessible name to the project currently shown
+  modal.setAttribute('aria-label', `プロジェクト詳細: ${alt}`);
   lockScroll(trigger);
   modal.classList.add('open');
   modalOverlay.classList.add('open');
   modal.addEventListener('keydown', trapFocus);
-  modalClose.focus();
+  modalClose?.focus();
 }
 
 function closeModal() {
+  if (!modal || !modalOverlay) return;
   modal.classList.remove('open');
   modalOverlay.classList.remove('open');
   modal.removeEventListener('keydown', trapFocus);
@@ -135,24 +195,40 @@ function closeModal() {
 // ─────────────────────────────────────────
 // Work cards — stagger + modal trigger
 // P-4: single querySelectorAll pass
+// A11Y-2: cards are keyboard-operable (tabindex+role in HTML); Enter/Space
+// opens the modal the same way a click does.
 // ─────────────────────────────────────────
 document.querySelectorAll('.work-card').forEach((card, i) => {
   /** @type {HTMLElement} */ (card).style.transitionDelay = `${(i % 3) * 0.08}s`;
 
-  card.addEventListener('click', (e) => {
-    const btn = /** @type {HTMLElement} */ (/** @type {Element} */ (e.target).closest('.card-expand'));
+  const triggerModalFromCard = (/** @type {Event} */ e) => {
+    const btn = /** @type {HTMLElement | null} */ (
+      e.target instanceof Element ? e.target.closest('.card-expand') : null
+    );
     const trigger = btn ?? /** @type {HTMLElement} */ (card);
     const img = /** @type {HTMLImageElement | null} */ (card.querySelector('.card-image img'));
     if (!img) return;
     openModal({ src: img.src, alt: img.alt, trigger });
+  };
+
+  card.addEventListener('click', triggerModalFromCard);
+
+  card.addEventListener('keydown', (e) => {
+    const ke = /** @type {KeyboardEvent} */ (e);
+    if (ke.key !== 'Enter' && ke.key !== ' ') return;
+    // Avoid double-handling when the focused .card-expand button itself
+    // already triggers a native click on Enter/Space.
+    if (document.activeElement !== card) return;
+    ke.preventDefault();
+    triggerModalFromCard(ke);
   });
 });
 
 // ─────────────────────────────────────────
 // Modal close handlers
 // ─────────────────────────────────────────
-modalClose.addEventListener('click', closeModal);
-modalOverlay.addEventListener('click', closeModal);
+modalClose?.addEventListener('click', closeModal);
+modalOverlay?.addEventListener('click', closeModal);
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeModal();
 });
